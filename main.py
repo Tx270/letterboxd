@@ -7,8 +7,9 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "username", 
-        type=str, 
+        "-u", "--user",
+        type=str,
+        required=True,
         help="Valid Letterboxd username"
     )
 
@@ -20,4 +21,4 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    build_database(args.username, movies_dir=args.dir)
+    build_database(args.user, movies_dir=args.dir)
