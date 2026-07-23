@@ -5,7 +5,8 @@ from tqdm import tqdm
 from parsing import (
     get_letterboxd_watchlist,
     get_upflix_url,
-    get_upflix_platforms
+    get_upflix_platforms,
+    get_movie_local
 )
 
 PLATFORMS_LIST = [
@@ -20,7 +21,7 @@ PLATFORMS_LIST = [
 
 DB_NAME = "movies.db"
 
-def build_database(username, db_path=DB_NAME):
+def build_database(username, movies_dir, db_path=DB_NAME):
     if os.path.exists(db_path):
         os.remove(db_path)
 
@@ -34,6 +35,7 @@ def build_database(username, db_path=DB_NAME):
             title TEXT NOT NULL,
             year INTEGER,
             upflix_url TEXT,
+            local INTEGER DEFAULT 0,
             {platform_columns}
         )
     '''
@@ -49,6 +51,8 @@ def build_database(username, db_path=DB_NAME):
         year = movie["year"]
         
         pbar.set_description(f"Movie: {title[:23]:<23}")
+
+        is_local = get_movie_local(title, year, movies_dir)
         
         upflix_url = get_upflix_url(title, year)
         found_platforms = get_upflix_platforms(upflix_url) if upflix_url else []
@@ -60,10 +64,10 @@ def build_database(username, db_path=DB_NAME):
                 raise ValueError(f"\nUnrecognized platform: '{p}' for '{title}'!")
             platform_flags[p] = 1
 
-        cols = ["title", "year", "upflix_url"] + [f'"{p}"' for p in PLATFORMS_LIST]
+        cols = ["title", "year", "upflix_url", "local"] + [f'"{p}"' for p in PLATFORMS_LIST]
         placeholders = ", ".join(["?"] * len(cols))
         sql = f'INSERT INTO movies ({", ".join(cols)}) VALUES ({placeholders})'
-        values = [title, year, upflix_url] + [platform_flags[p] for p in PLATFORMS_LIST]
+        values = [title, year, upflix_url, is_local] + [platform_flags[p] for p in PLATFORMS_LIST]
         
         cursor.execute(sql, values)
 

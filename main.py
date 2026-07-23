@@ -1,5 +1,5 @@
 import argparse
-
+from db import build_database
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -12,5 +12,12 @@ if __name__ == "__main__":
         help="Valid Letterboxd username"
     )
 
+    parser.add_argument(
+        "-d", "--dir",
+        type=str,
+        default=None,
+        help="Optional path to local movies directory"
+    )
+
     args = parser.parse_args()
-    build_database(args.username)
+    build_database(args.username, movies_dir=args.dir)

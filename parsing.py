@@ -1,4 +1,5 @@
 import requests
+import os
 import urllib.parse
 from bs4 import BeautifulSoup
 
@@ -83,4 +84,23 @@ def get_upflix_url(title, year=None):
         print(f"Upflix API error: {e}")
         return None
 
-    return None
+
+def get_movie_local(title, year, movies_dir):
+    if not movies_dir:
+        return None
+
+    if not os.path.exists(movies_dir):
+        return 0
+
+    expected_folder_name = f"{title} ({year})" if year else title
+    expected_path = os.path.join(movies_dir, expected_folder_name)
+
+    try:
+        existing_folders = os.listdir(movies_dir)
+        for folder in existing_folders:
+            if folder.lower() == expected_folder_name.lower():
+                return 1
+    except OSError:
+        pass
+
+    return 0
