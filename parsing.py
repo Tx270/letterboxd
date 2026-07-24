@@ -1,5 +1,6 @@
 import requests
 import os
+import re
 import urllib.parse
 from bs4 import BeautifulSoup
 from time import sleep
@@ -8,6 +9,16 @@ from time import sleep
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
+
+
+def parse_movie_title_and_year(raw_title):
+    match = re.search(r'^(.*?)\s*\((\d{4})\)$', raw_title.strip())
+    if match:
+        clean_title = match.group(1).strip()
+        year = int(match.group(2))
+        return clean_title, year
+    
+    return raw_title.strip(), None
 
 
 def get_letterboxd_watchlist(username):
@@ -27,7 +38,8 @@ def get_letterboxd_watchlist(username):
 
             for i, comp in enumerate(components, 1):
                 title = comp.get("data-item-name")
-                titles.append({"title": title[:-7], "year": int(title[-5:-1])})
+                clean_title, year = parse_movie_title_and_year(title)
+                titles.append({"title": clean_title, "year": year})
 
             page += 1
         else:
@@ -51,8 +63,8 @@ def query_upflix_api(title, year=None):
 
         data = response.json()
         if not data:
-            print(f"\nEmpty response for {title}. Sleeping for 1 sec...")
-            sleep(1)
+            print(f"\nEmpty response for {title}. Sleeping for 5 sec...")
+            sleep(5)
             query_upflix_api(title, year)
 
         if isinstance(data, dict):
