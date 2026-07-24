@@ -4,8 +4,7 @@ from tqdm import tqdm
 
 from parsing import (
     get_letterboxd_watchlist,
-    get_upflix_url,
-    get_upflix_platforms,
+    query_upflix_api,
     get_movie_local
 )
 
@@ -54,8 +53,7 @@ def build_database(username, movies_dir, db_path=DB_NAME):
 
         is_local = get_movie_local(title, year, movies_dir)
         
-        upflix_url = get_upflix_url(title, year)
-        found_platforms = get_upflix_platforms(upflix_url) if upflix_url else []
+        upflix_url, found_platforms = query_upflix_api(title, year)
 
         platform_flags = {p: 0 for p in PLATFORMS_LIST}
         for p in found_platforms:

@@ -2,6 +2,7 @@ import requests
 import os
 import urllib.parse
 from bs4 import BeautifulSoup
+from time import sleep
 
 
 HEADERS = {
@@ -36,26 +37,7 @@ def get_letterboxd_watchlist(username):
     return titles
 
 
-def get_upflix_platforms(url):
-    if not url:
-        return None
-    response = requests.get(url, headers=HEADERS)
-    if response.status_code != 200:
-        print(f"Błąd HTTP: {response.status_code}")
-        return []
-
-    soup = BeautifulSoup(response.text, 'html.parser')
-    
-    platforms = set()
-    for elem in soup.select('a[data-source-label]'):
-        label = elem.get('data-source-label')
-        if label:
-            platforms.add(label.strip())
-
-    return sorted(list(platforms))
-
-
-def get_upflix_url(title, year=None):
+def query_upflix_api(title, year=None):
     params = {"search": title}
     if year:
         params["rok"] = f"{year}-{year}"
@@ -65,9 +47,13 @@ def get_upflix_url(title, year=None):
     try:
         response = requests.get(api_url, headers=HEADERS, timeout=10)
         if response.status_code != 200:
-            return None
+            return (None, [])
 
         data = response.json()
+        if not data:
+            print(f"\nEmpty response for {title}. Sleeping for 1 sec...")
+            sleep(1)
+            query_upflix_api(title, year)
 
         if isinstance(data, dict):
             models = data.get("models", [])
@@ -78,11 +64,18 @@ def get_upflix_url(title, year=None):
 
         if models and isinstance(models[0], dict):
             rel_url = models[0].get("url", "")
-            return f"https://upflix.pl{rel_url}" if rel_url else None
+            sources = models[0].get("sources", "")
+            platforms = [item['title'].replace('Zobacz w ', '').strip() for item in sources]
+            return (
+                f"https://upflix.pl{rel_url}" if rel_url else None,
+                platforms if platforms else []
+            )
 
     except Exception as e:
         print(f"Upflix API error: {e}")
-        return None
+        return (None, [])
+
+    return (None, [])
 
 
 def get_movie_local(title, year, movies_dir):
