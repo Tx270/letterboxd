@@ -27,7 +27,7 @@ def build_database(username, movies_dir, db_path=DB_NAME):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    platform_columns = ", ".join([f'"{p}" INTEGER DEFAULT 0' for p in PLATFORMS_LIST])
+    platform_columns = ", ".join([f'"{p}" TEXT DEFAULT NULL' for p in PLATFORMS_LIST])
     create_table_sql = f'''
         CREATE TABLE movies (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -55,12 +55,13 @@ def build_database(username, movies_dir, db_path=DB_NAME):
         
         upflix_url, found_platforms = query_upflix_api(title, year)
 
-        platform_flags = {p: 0 for p in PLATFORMS_LIST}
-        for p in found_platforms:
-            if p not in allowed_platforms_set:
-                conn.close()
-                raise ValueError(f"\nUnrecognized platform: '{p}' for '{title}'!")
-            platform_flags[p] = 1
+        platform_flags = {p: None for p in PLATFORMS_LIST}
+        if found_platforms:
+            for p, status in found_platforms.items():
+                if p not in allowed_platforms_set:
+                    conn.close()
+                    raise ValueError(f"\nUnrecognized platform: '{p}' for '{title}'!")
+                platform_flags[p] = status
 
         cols = ["title", "year", "upflix_url", "local"] + [f'"{p}"' for p in PLATFORMS_LIST]
         placeholders = ", ".join(["?"] * len(cols))

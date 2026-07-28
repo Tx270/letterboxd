@@ -1,4 +1,4 @@
--- Recommends the best new streaming service to subscribe to by finding which unowned platform offers the highest number of unavailable movies from your watchlist.
+-- Recommends the best new streaming service to subscribe to by finding which unowned platform offers the highest number of unavailable movies from your watchlist (ABONAMENT only).
 WITH moje_uslugi AS (
     SELECT value AS name 
     FROM json_each('["Netflix", "HBO Max", "SkyShowtime", "Amazon Prime Video", "Youtube"]')
@@ -48,42 +48,42 @@ unseen_movies AS (
               WHEN 'Animation Digital Network' THEN m."Animation Digital Network"
               WHEN 'Youtube' THEN m."Youtube"
               WHEN 'Dokufilm' THEN m."Dokufilm"
-          END = 1
+          END = 'ABONAMENT'
       )
 ),
 all_other_platforms AS (
-    SELECT 'Disney+' AS platform, title, year FROM unseen_movies WHERE "Disney+" = 1
-    UNION ALL SELECT 'Polsat Box Go', title, year FROM unseen_movies WHERE "Polsat Box Go" = 1
-    UNION ALL SELECT 'Rakuten', title, year FROM unseen_movies WHERE "Rakuten" = 1
-    UNION ALL SELECT 'Player', title, year FROM unseen_movies WHERE "Player" = 1
-    UNION ALL SELECT 'TVP VOD', title, year FROM unseen_movies WHERE "TVP VOD" = 1
-    UNION ALL SELECT 'Apple TV', title, year FROM unseen_movies WHERE "Apple TV" = 1
-    UNION ALL SELECT 'PLAY NOW', title, year FROM unseen_movies WHERE "PLAY NOW" = 1
-    UNION ALL SELECT 'Canal+', title, year FROM unseen_movies WHERE "Canal+" = 1
-    UNION ALL SELECT 'CDA Premium', title, year FROM unseen_movies WHERE "CDA Premium" = 1
-    UNION ALL SELECT 'Ninateka', title, year FROM unseen_movies WHERE "Ninateka" = 1
-    UNION ALL SELECT 'E-Kino Pod Baranami', title, year FROM unseen_movies WHERE "E-Kino Pod Baranami" = 1
-    UNION ALL SELECT 'MOJEeKINO', title, year FROM unseen_movies WHERE "MOJEeKINO" = 1
-    UNION ALL SELECT 'Nowe Horyzonty', title, year FROM unseen_movies WHERE "Nowe Horyzonty" = 1
-    UNION ALL SELECT 'FilmBox+', title, year FROM unseen_movies WHERE "FilmBox+" = 1
-    UNION ALL SELECT 'Pięć Smaków', title, year FROM unseen_movies WHERE "Pięć Smaków" = 1
-    UNION ALL SELECT 'VOD.MDAG.PL', title, year FROM unseen_movies WHERE "VOD.MDAG.PL" = 1
-    UNION ALL SELECT 'Katoflix', title, year FROM unseen_movies WHERE "Katoflix" = 1
-    UNION ALL SELECT 'Outfilm', title, year FROM unseen_movies WHERE "Outfilm" = 1
-    UNION ALL SELECT '35mm.online', title, year FROM unseen_movies WHERE "35mm.online" = 1
-    UNION ALL SELECT 'FlixClassic', title, year FROM unseen_movies WHERE "FlixClassic" = 1
-    UNION ALL SELECT 'CHILI', title, year FROM unseen_movies WHERE "CHILI" = 1
-    UNION ALL SELECT 'RED GO', title, year FROM unseen_movies WHERE "RED GO" = 1
-    UNION ALL SELECT 'Megogo', title, year FROM unseen_movies WHERE "Megogo" = 1
-    UNION ALL SELECT 'ARTE po polsku', title, year FROM unseen_movies WHERE "ARTE po polsku" = 1
-    UNION ALL SELECT 'TVSmart', title, year FROM unseen_movies WHERE "TVSmart" = 1
-    UNION ALL SELECT 'RafaelKino', title, year FROM unseen_movies WHERE "RafaelKino" = 1
-    UNION ALL SELECT 'Pilot WP', title, year FROM unseen_movies WHERE "Pilot WP" = 1
-    UNION ALL SELECT 'Sweet.tv', title, year FROM unseen_movies WHERE "Sweet.tv" = 1
-    UNION ALL SELECT 'Mubi', title, year FROM unseen_movies WHERE "Mubi" = 1
-    UNION ALL SELECT 'Crunchyroll', title, year FROM unseen_movies WHERE "Crunchyroll" = 1
-    UNION ALL SELECT 'Animation Digital Network', title, year FROM unseen_movies WHERE "Animation Digital Network" = 1
-    UNION ALL SELECT 'Dokufilm', title, year FROM unseen_movies WHERE "Dokufilm" = 1
+    SELECT 'Disney+' AS platform, title, year FROM unseen_movies WHERE "Disney+" = 'ABONAMENT'
+    UNION ALL SELECT 'Polsat Box Go', title, year FROM unseen_movies WHERE "Polsat Box Go" = 'ABONAMENT'
+    UNION ALL SELECT 'Rakuten', title, year FROM unseen_movies WHERE "Rakuten" = 'ABONAMENT'
+    UNION ALL SELECT 'Player', title, year FROM unseen_movies WHERE "Player" = 'ABONAMENT'
+    UNION ALL SELECT 'TVP VOD', title, year FROM unseen_movies WHERE "TVP VOD" = 'ABONAMENT'
+    UNION ALL SELECT 'Apple TV', title, year FROM unseen_movies WHERE "Apple TV" = 'ABONAMENT'
+    UNION ALL SELECT 'PLAY NOW', title, year FROM unseen_movies WHERE "PLAY NOW" = 'ABONAMENT'
+    UNION ALL SELECT 'Canal+', title, year FROM unseen_movies WHERE "Canal+" = 'ABONAMENT'
+    UNION ALL SELECT 'CDA Premium', title, year FROM unseen_movies WHERE "CDA Premium" = 'ABONAMENT'
+    UNION ALL SELECT 'Ninateka', title, year FROM unseen_movies WHERE "Ninateka" = 'ABONAMENT'
+    UNION ALL SELECT 'E-Kino Pod Baranami', title, year FROM unseen_movies WHERE "E-Kino Pod Baranami" = 'ABONAMENT'
+    UNION ALL SELECT 'MOJEeKINO', title, year FROM unseen_movies WHERE "MOJEeKINO" = 'ABONAMENT'
+    UNION ALL SELECT 'Nowe Horyzonty', title, year FROM unseen_movies WHERE "Nowe Horyzonty" = 'ABONAMENT'
+    UNION ALL SELECT 'FilmBox+', title, year FROM unseen_movies WHERE "FilmBox+" = 'ABONAMENT'
+    UNION ALL SELECT 'Pięć Smaków', title, year FROM unseen_movies WHERE "Pięć Smaków" = 'ABONAMENT'
+    UNION ALL SELECT 'VOD.MDAG.PL', title, year FROM unseen_movies WHERE "VOD.MDAG.PL" = 'ABONAMENT'
+    UNION ALL SELECT 'Katoflix', title, year FROM unseen_movies WHERE "Katoflix" = 'ABONAMENT'
+    UNION ALL SELECT 'Outfilm', title, year FROM unseen_movies WHERE "Outfilm" = 'ABONAMENT'
+    UNION ALL SELECT '35mm.online', title, year FROM unseen_movies WHERE "35mm.online" = 'ABONAMENT'
+    UNION ALL SELECT 'FlixClassic', title, year FROM unseen_movies WHERE "FlixClassic" = 'ABONAMENT'
+    UNION ALL SELECT 'CHILI', title, year FROM unseen_movies WHERE "CHILI" = 'ABONAMENT'
+    UNION ALL SELECT 'RED GO', title, year FROM unseen_movies WHERE "RED GO" = 'ABONAMENT'
+    UNION ALL SELECT 'Megogo', title, year FROM unseen_movies WHERE "Megogo" = 'ABONAMENT'
+    UNION ALL SELECT 'ARTE po polsku', title, year FROM unseen_movies WHERE "ARTE po polsku" = 'ABONAMENT'
+    UNION ALL SELECT 'TVSmart', title, year FROM unseen_movies WHERE "TVSmart" = 'ABONAMENT'
+    UNION ALL SELECT 'RafaelKino', title, year FROM unseen_movies WHERE "RafaelKino" = 'ABONAMENT'
+    UNION ALL SELECT 'Pilot WP', title, year FROM unseen_movies WHERE "Pilot WP" = 'ABONAMENT'
+    UNION ALL SELECT 'Sweet.tv', title, year FROM unseen_movies WHERE "Sweet.tv" = 'ABONAMENT'
+    UNION ALL SELECT 'Mubi', title, year FROM unseen_movies WHERE "Mubi" = 'ABONAMENT'
+    UNION ALL SELECT 'Crunchyroll', title, year FROM unseen_movies WHERE "Crunchyroll" = 'ABONAMENT'
+    UNION ALL SELECT 'Animation Digital Network', title, year FROM unseen_movies WHERE "Animation Digital Network" = 'ABONAMENT'
+    UNION ALL SELECT 'Dokufilm', title, year FROM unseen_movies WHERE "Dokufilm" = 'ABONAMENT'
 )
 SELECT 
     platform AS recommend_platform,

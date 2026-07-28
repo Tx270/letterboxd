@@ -1,4 +1,4 @@
--- Lists all movies from the watchlist alongside their availability across local storage and specified active streaming subscriptions.
+-- Lists all movies from the watchlist alongside their availability across local storage and specified active streaming subscriptions (ABONAMENT only).
 WITH moje_uslugi AS (
     SELECT value AS name 
     -- All streaming platforms you have access to
@@ -54,7 +54,7 @@ SELECT
                             WHEN 'Animation Digital Network' THEN m."Animation Digital Network"
                             WHEN 'Youtube' THEN m."Youtube"
                             WHEN 'Dokufilm' THEN m."Dokufilm"
-                        END = 1
+                        END = 'ABONAMENT'
                     )
                     ORDER BY u.name ASC
                 ) u

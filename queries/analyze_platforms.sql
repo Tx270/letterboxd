@@ -1,4 +1,4 @@
--- Analyzes active subscriptions to identify potential redundancies by counting unique vs. overlapping movie availability.
+-- Analyzes active subscriptions to identify potential redundancies by counting unique vs. overlapping movie availability (ABONAMENT only).
 WITH moje_uslugi AS (
     SELECT value AS name
     -- All streaming platforms you have access to
@@ -51,11 +51,11 @@ unpacked_movies AS (
             WHEN 'Animation Digital Network' THEN m."Animation Digital Network"
             WHEN 'Youtube' THEN m."Youtube"
             WHEN 'Dokufilm' THEN m."Dokufilm"
-        END = 1
+        END = 'ABONAMENT'
     )
 ),
 movie_provider_counts AS (
-    -- Liczymy na ilu Twoich platformach (+ local) jest dostępny dany film
+    -- Counts across how many of your platforms (+ local) a movie is available in subscription
     SELECT 
         m.id,
         (COALESCE(m.local, 0) + COUNT(um.platform)) AS total_sources
